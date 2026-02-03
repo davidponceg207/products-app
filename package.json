@@ -11,15 +11,19 @@
     "start:ios": "npm run ios -- --simulator= 'iPhone 16 Pro Max (6487C130-2C0A-467E-B6D2-52EB7B8D9F20)'"
   },
   "dependencies": {
+    "@eva-design/eva": "^2.2.0",
     "@react-native-masked-view/masked-view": "^0.3.2",
     "@react-native/new-app-screen": "0.83.1",
     "@react-navigation/native": "^7.1.28",
     "@react-navigation/stack": "^7.7.0",
+    "@ui-kitten/components": "^5.3.1",
+    "@ui-kitten/eva-icons": "^5.3.1",
     "react": "19.2.0",
     "react-native": "0.83.1",
     "react-native-gesture-handler": "^2.30.0",
     "react-native-safe-area-context": "^5.6.2",
-    "react-native-screens": "^4.21.0"
+    "react-native-screens": "^4.21.0",
+    "react-native-svg": "^15.15.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
