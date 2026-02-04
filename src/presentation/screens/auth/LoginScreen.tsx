@@ -1,8 +1,12 @@
 import { Button, Input, Layout, Text } from '@ui-kitten/components';
 import { ScrollView, useWindowDimensions } from 'react-native';
 import { MyIcon } from '../../components/ui/MyIcon';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParams } from '../../navigation/StackNavigator';
 
-export const LoginScreen = () => {
+interface Props extends StackScreenProps<RootStackParams, 'LoginScreen'> {}
+
+export const LoginScreen = ({navigation}: Props) => {
 
     const { height } = useWindowDimensions();
 
@@ -12,7 +16,7 @@ export const LoginScreen = () => {
 
                 <Layout style={{ paddingTop: height * 0.35 }}>
                     <Text category='h1'>Login</Text>
-                    <Text category='p2'>Please, login to continue</Text>
+                    <Text category='p2'>Please, log in to continue</Text>
                 </Layout>
 
                 {/* Inputs */}
@@ -43,7 +47,7 @@ export const LoginScreen = () => {
                         onPress={() => {}}
                         accessoryRight={ <MyIcon name='arrow-forward-outline' white/> }
                     >
-                        Login
+                        Log in
                     </Button>
                 </Layout>
 
@@ -56,7 +60,7 @@ export const LoginScreen = () => {
                     justifyContent: 'center'
                 }}>
                     <Text>Don't you have an account?</Text>
-                    <Text status='primary' category='s1' onPress={() => {}}>{' '}New account{' '}</Text>
+                    <Text status='primary' category='s1' onPress={() => navigation.navigate('RegisterScreen')}>{' '}New account{' '}</Text>
                 </Layout>
 
             </ScrollView>
