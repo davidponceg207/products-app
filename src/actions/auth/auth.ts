@@ -43,7 +43,8 @@ export const authCheckStatus = async () => {
 
     try {
 
-        const { data } = await tesloApi.get<AuthResponse>('./auth/auth/check-status');
+        const { data } = await tesloApi.get<AuthResponse>('/auth/check-status');
+        console.log(data)
         return returnUserToken(data);
 
         

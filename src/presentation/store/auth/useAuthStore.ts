@@ -29,7 +29,7 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
         await StorageAdapter.setItem('token', resp.token);
 
-        set({status:'unauthenticated', token: resp.token, user: resp.user})
+        set({status:'authenticated', token: resp.token, user: resp.user})
 
         return true;
     },
@@ -44,6 +44,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
 
         await StorageAdapter.setItem('token', resp.token);
 
-        set({status:'unauthenticated', token: resp.token, user: resp.user})
+        set({status:'authenticated', token: resp.token, user: resp.user})
     }
 }))
