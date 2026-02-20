@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import { StorageAdapter } from '../adapters/storage-adapter';
 
-const API_URL = 
+export const API_URL = 
     (STAGE === 'prod')
     ? PROD_URL
     : Platform.OS === 'ios'
