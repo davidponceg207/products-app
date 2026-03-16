@@ -9,9 +9,10 @@ import { FlatList, ScrollView } from "react-native"
 import { FadeInImage } from "../../components/ui/FadeInImage"
 import { Gender, Size } from "../../../domain/entities/product"
 import { MyIcon } from "../../components/ui/MyIcon"
+import { Formik } from "formik"
 
 const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
-const genres: Gender[] = [Gender.Kid, Gender.Men, Gender.Women, Gender.Unisex];
+const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Women, Gender.Unisex];
 
 interface Props extends StackScreenProps<RootStackParams, 'ProductScreen'>{}
 
@@ -29,91 +30,122 @@ export const ProductScreen = ({route}: Props) => {
         return (<MainLayout title="Loading..." />)
     }
     return (
-        <MainLayout title={ product.title } subTitle={`Price: ${product.price}`}>
-            <ScrollView style={{flex: 1}}>
+        <Formik
+            initialValues={product}
+            onSubmit={values => console.log(values)}
+        >
+            {
+                ({handleChange, handleSubmit, values, errors, setFieldValue}) => (
 
-                {/* Product Images */}
-                <Layout>
-                    <FlatList
-                        data={ product.images }
-                        keyExtractor={(item) => item}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({item}) => (
-                            <FadeInImage uri={item} style={{
-                                width: 300, height: 300, marginHorizontal: 7
-                            }} />
-                        )}
-                    />
-                </Layout>
+                    <MainLayout title={ values.title } subTitle={`Price: ${values.price}`}>
+                        <ScrollView style={{flex: 1}}>
 
-                {/* Form */}
-                <Layout style={{ marginHorizontal: 10 }}>
-                    <Input
-                        label='Title'
-                        value={ product.title }
-                        style={{marginVertical: 5}}
-                    />
-                    <Input
-                        label='Slug'
-                        value={ product.slug }
-                        style={{marginVertical: 5}}
-                    />
-                    <Input
-                        label='Description'
-                        value={ product.description }
-                        multiline
-                        numberOfLines={5}
-                        style={{marginVertical: 5}}
-                    />
-                </Layout>
+                            {/* Product Images */}
+                            <Layout>
+                                <FlatList
+                                    data={ values.images }
+                                    keyExtractor={(item) => item}
+                                    horizontal
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({item}) => (
+                                        <FadeInImage uri={item} style={{
+                                            width: 300, height: 300, marginHorizontal: 7
+                                        }} />
+                                    )}
+                                />
+                            </Layout>
 
-                {/* Price and stock */}
-                <Layout style={{
-                    marginHorizontal: 15, flexDirection: 'row', gap: 10, marginVertical: 5
-                }}>
+                            {/* Form */}
+                            <Layout style={{ marginHorizontal: 10 }}>
+                                <Input
+                                    label='Title'
+                                    value={ values.title }
+                                    style={{marginVertical: 5}}
+                                    onChangeText={handleChange('title')}
+                                />
+                                <Input
+                                    label='Slug'
+                                    value={ values.slug }
+                                    style={{marginVertical: 5}}
+                                    onChangeText={handleChange('slug')}
+                                />
+                                <Input
+                                    label='Description'
+                                    value={ values.description }
+                                    multiline
+                                    numberOfLines={5}
+                                    style={{marginVertical: 5}}
+                                    onChangeText={handleChange('description')}
+                                />
+                            </Layout>
 
-                    <Input
-                        label='Precio'
-                        value={ product.price.toString() }
-                        style={{flex: 1}}
-                    />
-                    <Input
-                        label='Stock'
-                        value={ product.stock.toString() }
-                        style={{flex: 1}}
-                    />
+                            {/* Price and stock */}
+                            <Layout style={{
+                                marginHorizontal: 15, flexDirection: 'row', gap: 10, marginVertical: 5
+                            }}>
 
-                </Layout>
+                                <Input
+                                    label='Precio'
+                                    value={ values.price.toString() }
+                                    onChangeText={handleChange('price')}
+                                    style={{flex: 1}}
+                                />
+                                <Input
+                                    label='Stock'
+                                    value={ values.stock.toString() }
+                                    onChangeText={handleChange('stock')}
+                                    style={{flex: 1}}
+                                />
 
-                {/* Selects */}
-                <ButtonGroup style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }} size="small" appearance="outline">
-                    {
-                        sizes.map((size) => (
-                            <Button key={size} style={{flex: 1, backgroundColor: true ? theme['color-primary-200'] : undefined}} >{size}</Button>
-                        ))
-                    }
-                </ButtonGroup>
+                            </Layout>
 
-                <ButtonGroup style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }} size="small" appearance="outline">
-                    {
-                        genres.map((genre) => (
-                            <Button key={genre} style={{flex: 1, backgroundColor: true ? theme['color-primary-200'] : undefined}} >{genre}</Button>
-                        ))
-                    }
-                </ButtonGroup>
+                            {/* Selects */}
+                            <ButtonGroup style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }} size="small" appearance="outline">
+                                {
+                                    sizes.map((size) => (
+                                        <Button
+                                            key={size}
+                                            style={{flex: 1, backgroundColor: values.sizes.includes(size) ? theme['color-primary-200'] : undefined}}
+                                            onPress={() => setFieldValue(
+                                                'sizes',
+                                                values.sizes.includes(size)
+                                                    ? values.sizes.filter(s => s !== size)
+                                                    : [...values.sizes, size]
+                                            )}
+                                        >{size}</Button>
+                                    ))
+                                }
+                            </ButtonGroup>
 
-                {/* Save button */}
-                <Button accessoryLeft={<MyIcon name="save-outline" white />} style={{margin: 15}} onPress={() => console.log('Save')}>
-                    Save
-                </Button>
+                            <ButtonGroup style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }} size="small" appearance="outline">
+                                {
+                                    genders.map((gender) => (
+                                        <Button
+                                            onPress={() => setFieldValue('gender', gender)}
+                                            key={gender}
+                                            style={{flex: 1, backgroundColor: values.gender.startsWith(gender) ? theme['color-primary-200'] : undefined}}
+                                        >{gender}</Button>
+                                    ))
+                                }
+                            </ButtonGroup>
 
-                {/* Extra */}
-                <Text style={{ margin: 15 }}>{JSON.stringify(product, null, 2)}</Text>
+                            {/* Save button */}
+                            <Button accessoryLeft={<MyIcon name="save-outline" white />} style={{margin: 15}} onPress={() => console.log('Save')}>
+                                Save
+                            </Button>
 
-                <Layout style={{ height: 200 }} />
+                            {/* Extra */}
+                            <Text style={{ margin: 15 }}>{JSON.stringify(values, null, 2)}</Text>
 
-            </ScrollView>
-        </MainLayout>
+                            <Layout style={{ height: 200 }} />
+
+                        </ScrollView>
+                    </MainLayout>
+
+                )
+            }
+
+
+        </Formik>
     )
 }
