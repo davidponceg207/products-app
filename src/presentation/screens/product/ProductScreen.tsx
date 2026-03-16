@@ -1,4 +1,4 @@
-import { Input, Layout } from "@ui-kitten/components"
+import { Button, ButtonGroup, Input, Layout, Text, useTheme } from "@ui-kitten/components"
 import { MainLayout } from "../../layouts/MainLayout"
 import { useQuery } from "@tanstack/react-query"
 import { StackScreenProps } from "@react-navigation/stack"
@@ -7,12 +7,18 @@ import { getProductById } from "../../../actions/products/get-product-by-id"
 import { useRef } from "react"
 import { FlatList, ScrollView } from "react-native"
 import { FadeInImage } from "../../components/ui/FadeInImage"
+import { Gender, Size } from "../../../domain/entities/product"
+import { MyIcon } from "../../components/ui/MyIcon"
+
+const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
+const genres: Gender[] = [Gender.Kid, Gender.Men, Gender.Women, Gender.Unisex];
 
 interface Props extends StackScreenProps<RootStackParams, 'ProductScreen'>{}
 
 export const ProductScreen = ({route}: Props) => {
 
     const productIdRef = useRef(route.params.productId);
+    const theme = useTheme();
 
     const {data: product} = useQuery({
         queryKey: ['product', productIdRef.current],
@@ -62,7 +68,7 @@ export const ProductScreen = ({route}: Props) => {
                     />
                 </Layout>
 
-                {/*  */}
+                {/* Price and stock */}
                 <Layout style={{
                     marginHorizontal: 15, flexDirection: 'row', gap: 10, marginVertical: 5
                 }}>
@@ -80,7 +86,30 @@ export const ProductScreen = ({route}: Props) => {
 
                 </Layout>
 
-                {/*  */}
+                {/* Selects */}
+                <ButtonGroup style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }} size="small" appearance="outline">
+                    {
+                        sizes.map((size) => (
+                            <Button key={size} style={{flex: 1, backgroundColor: true ? theme['color-primary-200'] : undefined}} >{size}</Button>
+                        ))
+                    }
+                </ButtonGroup>
+
+                <ButtonGroup style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }} size="small" appearance="outline">
+                    {
+                        genres.map((genre) => (
+                            <Button key={genre} style={{flex: 1, backgroundColor: true ? theme['color-primary-200'] : undefined}} >{genre}</Button>
+                        ))
+                    }
+                </ButtonGroup>
+
+                {/* Save button */}
+                <Button accessoryLeft={<MyIcon name="save-outline" white />} style={{margin: 15}} onPress={() => console.log('Save')}>
+                    Save
+                </Button>
+
+                {/* Extra */}
+                <Text style={{ margin: 15 }}>{JSON.stringify(product, null, 2)}</Text>
 
                 <Layout style={{ height: 200 }} />
 
