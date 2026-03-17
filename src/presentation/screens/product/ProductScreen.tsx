@@ -1,16 +1,16 @@
-import { Button, ButtonGroup, Input, Layout, Text, useTheme } from "@ui-kitten/components"
+import { Button, ButtonGroup, Input, Layout, useTheme } from "@ui-kitten/components"
 import { MainLayout } from "../../layouts/MainLayout"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { StackScreenProps } from "@react-navigation/stack"
 import { RootStackParams } from "../../navigation/StackNavigator"
 import { getProductById } from "../../../actions/products/get-product-by-id"
 import { useRef } from "react"
-import { FlatList, Image, ScrollView } from "react-native"
-import { FadeInImage } from "../../components/ui/FadeInImage"
+import { ScrollView } from "react-native"
 import { Gender, Product, Size } from "../../../domain/entities/product"
 import { MyIcon } from "../../components/ui/MyIcon"
 import { Formik } from "formik"
 import { updateCreateProduct } from "../../../actions/products/update-create-product"
+import { ProductImages } from "../../components/products/ProductImages"
 
 const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
 const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Women, Gender.Unisex];
@@ -54,23 +54,7 @@ export const ProductScreen = ({route}: Props) => {
 
                             {/* Product Images */}
                             <Layout style={{marginVertical: 10, justifyContent: 'center', alignItems: 'center'}}>
-                                {
-                                    (values.images.length === 0)
-                                        ? <Image source={require('../../../assets/no-product-image.png')} style={{width: 300, height: 300}}/>
-                                        : (
-                                            <FlatList
-                                                data={ values.images }
-                                                keyExtractor={(item) => item}
-                                                horizontal
-                                                showsHorizontalScrollIndicator={false}
-                                                renderItem={({item}) => (
-                                                    <FadeInImage uri={item} style={{
-                                                        width: 300, height: 300, marginHorizontal: 7
-                                                    }} />
-                                                )}
-                                            />
-                                        )
-                                }
+                                <ProductImages images={values.images} />
                             </Layout>
 
                             {/* Form */}
@@ -156,7 +140,7 @@ export const ProductScreen = ({route}: Props) => {
                             </Button>
 
                             {/* Extra */}
-                            <Text style={{ margin: 15 }}>{JSON.stringify(values, null, 2)}</Text>
+                            {/* <Text style={{ margin: 15 }}>{JSON.stringify(values, null, 2)}</Text> */}
 
                             <Layout style={{ height: 200 }} />
 
