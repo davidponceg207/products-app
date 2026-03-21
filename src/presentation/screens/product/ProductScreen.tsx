@@ -49,7 +49,12 @@ export const ProductScreen = ({route}: Props) => {
             {
                 ({handleChange, handleSubmit, values, errors, setFieldValue}) => (
 
-                    <MainLayout title={ values.title } subTitle={`Price: ${values.price}`}>
+                    <MainLayout
+                        title={ values.title }
+                        subTitle={`Price: ${values.price}`}
+                        rightAction={() => console.log('Hello World')}
+                        rightActionIcon="camera-outline"
+                    >
                         <ScrollView style={{flex: 1}}>
 
                             {/* Product Images */}
