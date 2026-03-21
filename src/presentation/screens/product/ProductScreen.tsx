@@ -11,6 +11,7 @@ import { MyIcon } from "../../components/ui/MyIcon"
 import { Formik } from "formik"
 import { updateCreateProduct } from "../../../actions/products/update-create-product"
 import { ProductImages } from "../../components/products/ProductImages"
+import { CameraAdapter } from "../../../config/adapters/camera-adapter"
 
 const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
 const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Women, Gender.Unisex];
@@ -52,7 +53,10 @@ export const ProductScreen = ({route}: Props) => {
                     <MainLayout
                         title={ values.title }
                         subTitle={`Price: ${values.price}`}
-                        rightAction={() => console.log('Hello World')}
+                        rightAction={async() => {
+                            const photos = await CameraAdapter.takePicture();
+                            setFieldValue('images', [...values.images, ...photos])
+                        }}
                         rightActionIcon="camera-outline"
                     >
                         <ScrollView style={{flex: 1}}>
